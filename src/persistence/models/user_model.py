@@ -1,17 +1,10 @@
-from sqlalchemy import sql, Column, String, BIGINT
+from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
+from sqlalchemy import Column, String, Integer
 
 from src.persistence.models.base_models import TimedBaseModel
-from src.routers.payload.user_payload import UserPayload
 
 
-class UserModel(TimedBaseModel):
-    __tablename__ = 'users'
-    query: sql.Select
-
+class UserModel(SQLAlchemyBaseUserTable[int], TimedBaseModel):
     firstname = Column(String(256), nullable=False)
     lastname = Column(String(256))
-
-    def fill(self, payload: UserPayload):
-        self.firstname = payload.firstname
-        self.lastname = payload.lastname
-        return self
+    age = Column(Integer)

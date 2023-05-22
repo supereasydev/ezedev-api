@@ -35,5 +35,4 @@ app.include_router(root_router)
 @app.on_event("startup")
 async def startup():
     #   Connect to database
-    await database.setup(
-        f'postgresql+asyncpg://{config.db.user}:{config.db.password}@{config.db.host}/{config.db.database}?client_encoding=utf8')
+    await database.create_db_and_tables()
