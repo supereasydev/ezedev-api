@@ -3,8 +3,10 @@ import logging
 from fastapi import FastAPI
 
 from src.config import Config
+from src.exceptions.unicorn_exception import UnicornException
 from src.persistence.database import Database
 from src.routers import root_router
+from src.routers.exception_handler import unicorn_error
 
 logging.basicConfig(
     level=logging.INFO,
@@ -26,6 +28,7 @@ database = Database.get_instance()
 config = Config.get_instance('.env')
 
 # Register routers
+app.add_exception_handler(UnicornException, unicorn_error)
 app.include_router(root_router)
 
 
