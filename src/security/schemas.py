@@ -9,6 +9,7 @@ class UserRead(schemas.BaseUser[int]):
     firstname: str
     lastname: str
     age: int
+    email: Optional[str]
     is_active: bool = True
     is_superuser: bool = False
     is_verified: bool = False
