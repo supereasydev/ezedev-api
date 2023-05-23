@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Specify the name of the Systemd service
-SERVICE_NAME="ezedev"
+SERVICE_NAME="backend"
 
 # Specify the path to the Git repository
 REPO_PATH="/opt/backend"
