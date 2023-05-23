@@ -29,18 +29,24 @@ class Database:
             raise Exception("This class is a singleton!")
         self._logger = logging.getLogger(__name__)
         self._config = Config.get_instance()
-        self._engine = create_async_engine(f'postgresql+asyncpg://'
-                                           f'{self._config.db.user}:{self._config.db.password}@{self._config.db.host}/'
-                                           f'{self._config.db.database}')
-        self._async_session_maker = async_sessionmaker(self._engine, expire_on_commit=False)
+        self.engine = create_async_engine(f'postgresql+asyncpg://'
+                                          f'{self._config.db.user}:{self._config.db.password}@{self._config.db.host}/'
+                                          f'{self._config.db.database}')
+        self.async_session_maker = async_sessionmaker(self.engine, expire_on_commit=False)
 
-    async def create_db_and_tables(self):
-        async with self._engine.begin() as conn:
-            await conn.run_sync(BaseModel.metadata.create_all)
 
-    async def get_async_session(self) -> AsyncGenerator[AsyncSession, None]:
-        async with self._async_session_maker() as session:
-            yield session
+database = Database.get_instance()
 
-    async def get_user_db(self, session: AsyncSession = Depends(get_async_session)):
-        yield SQLAlchemyUserDatabase(session, UserModel)
+
+async def create_db_and_tables():
+    async with database.engine.begin() as conn:
+        await conn.run_sync(BaseModel.metadata.create_all)
+
+
+async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
+    async with database.async_session_maker() as session:
+        yield session
+
+
+async def get_user_db(session: AsyncSession = Depends(get_async_session)):
+    yield SQLAlchemyUserDatabase(session, UserModel)

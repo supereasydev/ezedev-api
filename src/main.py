@@ -1,12 +1,17 @@
 import logging
 
 from fastapi import FastAPI
+from fastapi_users import FastAPIUsers
 
 from src.config import Config
 from src.exceptions.unicorn_exception import UnicornException
-from src.persistence.database import Database
+from src.persistence.database import Database, create_db_and_tables
+from src.persistence.models.user_model import UserModel
 from src.routers import root_router
 from src.routers.exception_handler import unicorn_error
+from src.security.configuration import auth_backend
+from src.security.schemas import UserRead, UserCreate
+from src.security.user_manager import get_user_manager
 
 logging.basicConfig(
     level=logging.INFO,
@@ -31,8 +36,18 @@ config = Config.get_instance('.env')
 app.add_exception_handler(UnicornException, unicorn_error)
 app.include_router(root_router)
 
+# Register authorization routes
+fastapi_users = FastAPIUsers[UserModel, int](
+    get_user_manager,
+    [auth_backend],
+)
+app.include_router(
+    fastapi_users.get_auth_router(auth_backend),
+    prefix="",
+)
+
 
 @app.on_event("startup")
 async def startup():
     #   Connect to database
-    await database.create_db_and_tables()
+    await create_db_and_tables()

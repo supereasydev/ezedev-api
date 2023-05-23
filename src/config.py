@@ -15,6 +15,7 @@ class DbConfig:
 class Config:
     _instance = None
     db: DbConfig
+    jwt_secret: str = None
 
     @classmethod
     def get_instance(cls, path=None):
@@ -28,5 +29,6 @@ class Config:
                     user=env.str('DB_USER'),
                     database=env.str('DB_NAME')
                 ),
+                jwt_secret=env.str('JWT_SECRET')
             )
         return cls._instance
