@@ -2,13 +2,13 @@ import logging
 from typing import Optional
 
 from fastapi import Depends, Request
-from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_users import BaseUserManager, IntegerIDMixin, models, exceptions, schemas
 from sqlalchemy import select
 
 from src.config import Config
 from src.persistence.database import Database, get_user_db
 from src.persistence.models.user_model import UserModel
+from src.security.custom_credentials import OAuth2PasswordRequestCustomForm
 
 database = Database.get_instance()
 config = Config.get_instance()
@@ -72,7 +72,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[UserModel, int]):
         return created_user
 
     async def authenticate(
-            self, credentials: OAuth2PasswordRequestForm
+            self, credentials: OAuth2PasswordRequestCustomForm
     ) -> Optional[models.UP]:
         """
         Authenticate and return a user following a phone and a password.
@@ -82,7 +82,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[UserModel, int]):
         :param credentials: The user credentials.
         """
         try:
-            user = await self.get_by_phone(credentials.username)
+            user = await self.get_by_phone(credentials.phone)
             if user is None:
                 raise exceptions.UserNotExists()
         except exceptions.UserNotExists:
@@ -111,7 +111,6 @@ class UserManager(IntegerIDMixin, BaseUserManager[UserModel, int]):
         """
         stmt = select(UserModel).where(UserModel.phone == phone)
         return (await self.user_db.session.execute(stmt)).unique().scalar_one_or_none()
-
 
 
 async def get_user_manager(user_db=Depends(get_user_db)):
