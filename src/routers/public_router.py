@@ -6,7 +6,7 @@ from src.services.message_service import MessageService
 
 router = APIRouter(
     prefix='',
-    tags=['users']
+    tags=['public']
 )
 
 message_service = MessageService.get_instance()
