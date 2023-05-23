@@ -15,4 +15,5 @@ root_router.include_router(authorized_router)
 root_router.include_router(
     get_auth_router(auth_backend, get_user_manager),
     prefix="",
+    tags=['public']
 )
