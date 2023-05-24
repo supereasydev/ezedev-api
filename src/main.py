@@ -16,8 +16,8 @@ logging.basicConfig(
 
 # Application initialization
 app = FastAPI(
-    title="Изи Dev",
-    description="Rest API для бэкэнд сервиса \"EZEDEV\"",
+    title="eze dev",
+    description=" eze dev REST API",
     version="0.1.0",
     docs_url="/",
     redoc_url=None,
