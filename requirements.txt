@@ -3,3 +3,4 @@ gino==1.0.1
 sqlalchemy[asyncio]
 fastapi-cache2[redis]
 fastapi-users[sqlalchemy]
+fastapi==0.95.2
