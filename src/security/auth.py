@@ -45,7 +45,7 @@ def get_auth_router(
 
     @router.post(
         "/login",
-        name=f"auth:{backend.name}.login",
+        name=f"Login",
         responses=login_responses,
     )
     async def login(
