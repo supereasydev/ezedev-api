@@ -4,7 +4,7 @@
 SERVICE_NAME="backend"
 
 # Specify the path to the Git repository
-REPO_PATH="/opt/backend"
+REPO_PATH="/opt/ezedev-api"
 
 # Navigate to the Git repository
 cd "$REPO_PATH"
