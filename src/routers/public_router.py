@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+import asyncio
 
 from src.routers.payload.message_payload import MessagePayload
 from src.routers.schemas import PostResult
@@ -14,6 +15,7 @@ message_service = MessageService.get_instance()
 
 @router.get('/makeHandshake')
 async def make_handshake():
+    await asyncio.sleep(5)
     return {
         'message': 'Welcome to EZEDEV backend!'
     }
