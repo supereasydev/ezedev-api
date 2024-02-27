@@ -17,7 +17,7 @@ message_service = MessageService.get_instance()
 async def make_handshake():
     await asyncio.sleep(5)
     return {
-        'message': 'Welcome to EZEDEV backend!'
+        'message': 'Welcome to EZEDEV backend! - Please remove debug delay'
     }
 
 
